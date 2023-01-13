@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import model.Vaccine;
+import model.VaccineDistribution;
 
 public class junit_test1 {
 	
@@ -38,6 +39,22 @@ public class junit_test1 {
 		assertEquals("Unrecognized vaccine: Covishield (Non Replicating Viral Vector; Serum Institute of India)", v5.toString());
 		assertEquals("Unrecognized vaccine: BBIBP-CorV (Inactivated; Sinopharm)", v6.toString());
 		assertEquals("Unrecognized vaccine: CoronaVac (Inactivated; Sinovac)", v7.toString()); 
+	}
+	
+	/*
+	 * Tests related to the VaccineDistribution class.
+	 */
+	@Test 
+	public void test_vaccine_distribution_01() {
+		/* Create a distribution of some recognized vaccine. */
+		Vaccine v1 = new Vaccine("mRNA-1273", "RNA", "Moderna");
+		VaccineDistribution dist1 = new VaccineDistribution(v1, 10000);
+		assertEquals("10000 doses of mRNA-1273 by Moderna", dist1.toString());
+
+		/* Create a distribution of some unrecognized vaccine. */
+		Vaccine v6 = new Vaccine("BBIBP-CorV", "Inactivated", "Sinopharm");
+		VaccineDistribution dist2 = new VaccineDistribution(v6, 25000);
+		assertEquals("25000 doses of BBIBP-CorV by Sinopharm", dist2.toString());
 	}
 
 }
