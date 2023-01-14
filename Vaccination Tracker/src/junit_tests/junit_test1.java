@@ -78,6 +78,46 @@ public class junit_test1 {
 		assertEquals("No vaccination appointment for Alan yet", s2);
 	}
 	
+	@Test
+	public void test_health_record_02() {
+		/* 
+		 * Creating a health record with the patient name and 
+		 * 	the limit on the number of doses appearing on their vaccination history.
+		 */
+		HealthRecord rec = new HealthRecord("Alan", 5);
+
+		Vaccine v1 = new Vaccine("mRNA-1273", "RNA", "Moderna");
+		Vaccine v2 = new Vaccine("BNT162b2", "RNA", "Pfizer/BioNTech");
+
+		/* 
+		 * Add a record for the patient's 1st received dose.
+		 * Each record contains:
+		 * 	- the vaccine reference
+		 * 	- the name of vaccination site
+		 * 	- the date of receiving the dose  
+		 */
+		rec.addRecord(v1, "North York General Hospital", "April-20-2021");
+		/* 
+		 * A vaccination receipt contains:
+		 * 	- The number of doses the patient has received
+		 * 	- A semi-colon-separated list, where each item gives information about: 
+		 * 		+ the vaccine info
+		 * 		+ the name of vaccination site
+		 * 		+ the date of vaccination
+		 */
+		assertEquals("Number of doses Alan has received: 1 [Recognized vaccine: mRNA-1273 (RNA; Moderna) in North York General Hospital on April-20-2021]", rec.getVaccinationReceipt());
+
+		/* Add a record for the patient's 2nd received dose. */
+		rec.addRecord(v2, "Humber River Hospital", "June-30-2021");
+		assertEquals("Number of doses Alan has received: 2 [Recognized vaccine: mRNA-1273 (RNA; Moderna) in North York General Hospital on April-20-2021; Recognized vaccine: BNT162b2 (RNA; Pfizer/BioNTech) in Humber River Hospital on June-30-2021]", rec.getVaccinationReceipt());
+
+		/* 
+		 * Patient's appointment status does not get changed by adding records.
+		 * It's only changed when the `bookAppointment` method is invoked on a VaccinationSite object.
+		 */
+		assertEquals("No vaccination appointment for Alan yet", rec.getAppointmentStatus());
+	}
+	
 	
 
 }
