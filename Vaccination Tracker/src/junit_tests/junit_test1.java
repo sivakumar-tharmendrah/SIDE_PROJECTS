@@ -156,5 +156,53 @@ public class junit_test1 {
 		assertEquals(0, supplyOfSinovac);
 	}
 	
+	@Test
+	public void test_vaccination_site_02a() {
+		/* 
+		 * Create a vaccination site with its name and
+		 * 	the limit on the number of doses accumulated from the added distributions.
+		 */
+		VaccinationSite vs = new VaccinationSite("North York General Hospital", 10);
+
+		/* Add distributions of three recognized vaccines (identified by their codenames) */
+		Vaccine v1 = new Vaccine("mRNA-1273", "RNA", "Moderna");
+		Vaccine v2 = new Vaccine("BNT162b2", "RNA", "Pfizer/BioNTech");
+		Vaccine v3 = new Vaccine("AZD1222", "Non Replicating Viral Vector", "Oxford/AstraZeneca");
+
+		try {
+			/* 
+			 * The string description of a vaccination site includes:
+			 * 	1) its name
+			 * 	2) total supply
+			 * 	3) supplies of available kinds of vaccines (each displayed with their manufacturer; see below)
+			 * 	
+			 * 	Note. For 3), the order in which these supplies are reported corresponds to 
+			 * 			the chronological order of their first-added distributions.
+			 * 		  See the remaining test for an example. See the next test method for contrast.
+			 */
+
+			vs.addDistribution(v1, 3); /* 1st distribution of Moderna */
+			assertEquals("North York General Hospital has 3 available doses: <3 doses of Moderna>", vs.toString());
+
+			vs.addDistribution(v2, 2); /* 1st distribution of Pfizer */
+			assertEquals("North York General Hospital has 5 available doses: <3 doses of Moderna, 2 doses of Pfizer/BioNTech>", vs.toString());
+
+			vs.addDistribution(v1, 1); 
+			assertEquals("North York General Hospital has 6 available doses: <4 doses of Moderna, 2 doses of Pfizer/BioNTech>", vs.toString());
+
+			vs.addDistribution(v3, 1); /* 1st distribution of AZ */
+			assertEquals("North York General Hospital has 7 available doses: <4 doses of Moderna, 2 doses of Pfizer/BioNTech, 1 doses of Oxford/AstraZeneca>", vs.toString());
+
+			vs.addDistribution(v2, 3);
+			assertEquals("North York General Hospital has 10 available doses: <4 doses of Moderna, 5 doses of Pfizer/BioNTech, 1 doses of Oxford/AstraZeneca>", vs.toString());
+		}
+		catch(UnrecognizedVaccineCodeNameException e) {
+			fail("Unexpected exception thrown");
+		}
+		catch(TooMuchDistributionException e) {
+			fail("Unexpected exception thrown");
+		}
+	}
+	
 
 }
