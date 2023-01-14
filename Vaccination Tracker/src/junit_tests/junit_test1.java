@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import model.HealthRecord;
+import model.VaccinationSite;
 import model.Vaccine;
 import model.VaccineDistribution;
 
@@ -118,6 +119,42 @@ public class junit_test1 {
 		assertEquals("No vaccination appointment for Alan yet", rec.getAppointmentStatus());
 	}
 	
+	/*
+	 * Tests related to the VaccinationSite class.
+	 */
+
+	@Test
+	public void test_vaccination_site_01() {
+		/* 
+		 * Create a vaccination site with its name and
+		 * 	the limit on the number of doses accumulated from the added distributions.
+		 */
+		VaccinationSite vs = new VaccinationSite("North York General Hospital", 10);
+
+		assertEquals("North York General Hospital has 0 available doses: <>", vs.toString());
+
+		/* Initially, there is no supply on the site. */
+		int totalSupply = vs.getNumberOfAvailableDoses();
+		assertEquals(0, totalSupply);
+
+		/* 
+		 * When inquiring about the supply of a kind of vaccines,
+		 * 	the codename is used. 
+		 */
+
+		/* Supplies of recognized vaccines (but remember that the site is empty) */
+		int supplyOfModerna = vs.getNumberOfAvailableDoses("mRNA-1273");
+		int supplyOfPfizer = vs.getNumberOfAvailableDoses("BNT162b2");
+		assertEquals(0, supplyOfModerna);
+		assertEquals(0, supplyOfPfizer);
+
+		/* 
+		 * Supplies of unrecognized vaccines should always be zero,
+		 * 	as their distributions can never be added to the site. 
+		 */
+		int supplyOfSinovac = vs.getNumberOfAvailableDoses("CoronaVac");
+		assertEquals(0, supplyOfSinovac);
+	}
 	
 
 }
