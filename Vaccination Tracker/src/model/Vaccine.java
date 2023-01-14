@@ -29,5 +29,14 @@ public class Vaccine {
 	public String toString() {
 		return this.status;
 	}
+	
+	public String getCodename() {
+		return this.codename;
+	}
+
+	public String getManufacturer() {
+		return this.manufacturer;
+	}
+
 
 }

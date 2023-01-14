@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import model.HealthRecord;
 import model.Vaccine;
 import model.VaccineDistribution;
 
@@ -56,5 +57,27 @@ public class junit_test1 {
 		VaccineDistribution dist2 = new VaccineDistribution(v6, 25000);
 		assertEquals("25000 doses of BBIBP-CorV by Sinopharm", dist2.toString());
 	}
+	
+	/*
+	 * Tests related to the HealthRecord class.
+	 */
+	@Test
+	public void test_health_record_01() {
+		/* 
+		 * Create a health record with the patient name and 
+		 * 	the limit on the number of doses appearing on their vaccination history.
+		 */
+		HealthRecord rec = new HealthRecord("Alan", 5);
+
+		/* No vaccination history yet for the patient. */
+		String s1 = rec.getVaccinationReceipt();
+		assertEquals("Alan has not yet received any doses.", s1);
+
+		/* No appointments booked yet for the patient */
+		String s2 = rec.getAppointmentStatus();
+		assertEquals("No vaccination appointment for Alan yet", s2);
+	}
+	
+	
 
 }
