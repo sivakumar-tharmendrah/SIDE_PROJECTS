@@ -206,4 +206,109 @@ public class junit_test1 {
 	}
 	
 
+	@Test
+	public void test_vaccination_site_02b() {
+		/* 
+		 * Create a vaccination site with its name and
+		 * 	the limit on the number of doses accumulated from the added distributions.
+		 */
+		VaccinationSite vs = new VaccinationSite("North York General Hospital", 10);
+
+		/* Add distributions of three recognized vaccines (identified by their codenames) */
+		Vaccine v1 = new Vaccine("mRNA-1273", "RNA", "Moderna");
+		Vaccine v2 = new Vaccine("BNT162b2", "RNA", "Pfizer/BioNTech");
+		Vaccine v3 = new Vaccine("AZD1222", "Non Replicating Viral Vector", "Oxford/AstraZeneca");
+
+		try {
+			/* 
+			 * The string description of a vaccination site includes:
+			 * 	1) its name
+			 * 	2) total supply
+			 * 	3) supplies of available kinds of vaccines (each displayed with their manufacturer; see below)
+			 * 	
+			 * 	Note. For 3), the order in which these supplies are reported corresponds to 
+			 * 			the chronological order of their first-added distributions.
+			 */
+
+			vs.addDistribution(v3, 3); /* 1st distribution of AZ */
+			assertEquals("North York General Hospital has 3 available doses: <3 doses of Oxford/AstraZeneca>", vs.toString());
+			assertEquals(3, vs.getNumberOfAvailableDoses());
+			assertEquals(3, vs.getNumberOfAvailableDoses("AZD1222"));
+			assertEquals(0, vs.getNumberOfAvailableDoses("mRNA-1273"));
+			assertEquals(0, vs.getNumberOfAvailableDoses("BNT162b2"));
+
+			vs.addDistribution(v1, 2); /* 1st distribution of Moderna */
+			assertEquals("North York General Hospital has 5 available doses: <3 doses of Oxford/AstraZeneca, 2 doses of Moderna>", vs.toString());
+			assertEquals(5, vs.getNumberOfAvailableDoses());
+			assertEquals(3, vs.getNumberOfAvailableDoses("AZD1222"));
+			assertEquals(2, vs.getNumberOfAvailableDoses("mRNA-1273"));
+			assertEquals(0, vs.getNumberOfAvailableDoses("BNT162b2"));
+
+			vs.addDistribution(v3, 1); 
+			assertEquals("North York General Hospital has 6 available doses: <4 doses of Oxford/AstraZeneca, 2 doses of Moderna>", vs.toString());
+			assertEquals(6, vs.getNumberOfAvailableDoses());
+			assertEquals(4, vs.getNumberOfAvailableDoses("AZD1222"));
+			assertEquals(2, vs.getNumberOfAvailableDoses("mRNA-1273"));
+			assertEquals(0, vs.getNumberOfAvailableDoses("BNT162b2"));
+
+			vs.addDistribution(v2, 1); /* 1st distribution of Pfizer */
+			assertEquals("North York General Hospital has 7 available doses: <4 doses of Oxford/AstraZeneca, 2 doses of Moderna, 1 doses of Pfizer/BioNTech>", vs.toString());
+			assertEquals(7, vs.getNumberOfAvailableDoses());
+			assertEquals(4, vs.getNumberOfAvailableDoses("AZD1222"));
+			assertEquals(2, vs.getNumberOfAvailableDoses("mRNA-1273"));
+			assertEquals(1, vs.getNumberOfAvailableDoses("BNT162b2"));
+
+			vs.addDistribution(v1, 3);
+			assertEquals("North York General Hospital has 10 available doses: <4 doses of Oxford/AstraZeneca, 5 doses of Moderna, 1 doses of Pfizer/BioNTech>", vs.toString());
+			assertEquals(10, vs.getNumberOfAvailableDoses());
+			assertEquals(4, vs.getNumberOfAvailableDoses("AZD1222"));
+			assertEquals(5, vs.getNumberOfAvailableDoses("mRNA-1273"));
+			assertEquals(1, vs.getNumberOfAvailableDoses("BNT162b2"));
+		}
+		catch(UnrecognizedVaccineCodeNameException e) {
+			fail("Unexpected exception thrown");
+		}
+		catch(TooMuchDistributionException e) {
+			fail("Unexpected exception thrown");
+		}
+	}
+	
+	@Test
+	public void test_vaccination_site_02c() {
+
+		VaccinationSite vs = new VaccinationSite("North York General Hospital", 10);
+		Vaccine v1 = new Vaccine("mRNA-1273", "RNA", "Moderna");
+		Vaccine v2 = new Vaccine("Covishield", "Non Replicating Viral Vector", "Serum Institute of India");
+
+		try {
+			/* Add the distribution of a recognized vaccine (identified by its codename) */
+			vs.addDistribution(v1, 6); // 4 doses left before reaching the maximum    
+		}
+		catch(UnrecognizedVaccineCodeNameException e) {
+			fail("Unexpected exception thrown");
+		}
+		catch(TooMuchDistributionException e) {
+			fail("Unexpected exception thrown");
+		}
+
+		/* up to this point, the site is 4 doses away from being "full". */
+
+		try {
+			/* 
+			 * Add the distribution of an unrecognized vaccine (identified by its codename).
+			 * Even though the quantity to add (5) will cause the resulting supply 
+			 * 	to exceed the limit 10 (set above), the error of unrecognized vaccine takes priority.	
+			 */
+			vs.addDistribution(v2, 5);   
+			fail("Expected exception not thrown");
+		}
+		catch(UnrecognizedVaccineCodeNameException e) {
+			// Expected
+		}
+		catch(TooMuchDistributionException e) {
+			fail("Unexpected exception thrown");
+		}
+	}
+	
+
 }
