@@ -70,7 +70,7 @@ public class VaccinationSite {
 		}
 		
 		int result = 0;
-		if(index < 0) { //vaccine does not exist in distribution 
+		if(index >= 0) { //vaccine does not exist in distribution 
 			result = this.distributions[index].getNumberOfDoses();
 		}
 		return result;
@@ -96,7 +96,7 @@ public class VaccinationSite {
 		
 		list += ">";
 		
-		String result = String.format("%s has %d available doses: <>", 
+		String result = String.format("%s has %d available doses: %s", 
 				this.name, 
 				this.getNumberOfAvailableDoses(),
 				list);
