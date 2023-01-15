@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import model.HealthRecord;
+import model.TooMuchDistributionException;
+import model.UnrecognizedVaccineCodeNameException;
 import model.VaccinationSite;
 import model.Vaccine;
 import model.VaccineDistribution;
@@ -178,7 +180,6 @@ public class junit_test1 {
 			 * 	
 			 * 	Note. For 3), the order in which these supplies are reported corresponds to 
 			 * 			the chronological order of their first-added distributions.
-			 * 		  See the remaining test for an example. See the next test method for contrast.
 			 */
 
 			vs.addDistribution(v1, 3); /* 1st distribution of Moderna */

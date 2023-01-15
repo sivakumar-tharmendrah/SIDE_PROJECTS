@@ -23,6 +23,21 @@ public class VaccineDistribution {
 		return this.status;
 	}
 	
+	public Vaccine getVaccine() {
+		return this.vaccine;
+	}
+	
+	public int getNumberOfDoses() {
+		return this.numberOfDoses;
+	}
+	
+	public void setNumberOfDoses(int newNumberOfDoses) {
+		this.numberOfDoses = newNumberOfDoses;//this is the existing one plus  
+	}
+	
+	
+	
+	
 
 	
 	
