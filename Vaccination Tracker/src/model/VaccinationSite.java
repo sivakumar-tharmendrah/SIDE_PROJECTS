@@ -6,22 +6,22 @@ public class VaccinationSite {
 	private VaccineDistribution[] distributions;
 	private int nod;
 	private final int MAX_NUM_OF_DIST = 4;
+	private int maxSupply;
 	
 	public VaccinationSite(String name, int maxSupply) {
-		this.name = name;
+		this.maxSupply = maxSupply;
+		this.name = name; 
 		this.distributions = new VaccineDistribution[MAX_NUM_OF_DIST];
 		this.nod = 0;
 	}
 	
 	public void addDistribution(Vaccine v, int numberOfDoses) throws 
 	UnrecognizedVaccineCodeNameException, TooMuchDistributionException {
-		
-		boolean b2 = false;
-		
-		if(v.isRecognized() == false) {
+				
+		if(!v.isRecognized()) {
 			throw new UnrecognizedVaccineCodeNameException("Error: ...");
 		}
-		else if(b2){
+		else if(numberOfDoses + this.getNumberOfAvailableDoses() > this.maxSupply){
 			throw new TooMuchDistributionException("Error: ...");
 		}
 		else {
@@ -90,7 +90,7 @@ public class VaccinationSite {
 					d.getVaccine().getManufacturer());
 			if(i < this.nod - 1) {
 				list += ", ";
-			}
+			}  
 		}
 		
 		
@@ -102,6 +102,11 @@ public class VaccinationSite {
 				list);
 		
 		return result;
+	}
+
+	public void bookAppointment(HealthRecord alan) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

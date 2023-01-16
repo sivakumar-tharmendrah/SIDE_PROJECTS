@@ -8,6 +8,7 @@ public class Vaccine {
 	private String manufacturer;
 	private boolean recognized;
 	
+	
 	public Vaccine(String codename, String type, String manufacturer) {
 		this.codename = codename;
 		this.type = type;
@@ -44,7 +45,6 @@ public class Vaccine {
 	public String getManufacturer() {
 		return this.manufacturer;
 	}
-
-
+	
 
 }

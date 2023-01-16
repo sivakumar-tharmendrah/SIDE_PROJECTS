@@ -310,5 +310,107 @@ public class junit_test1 {
 		}
 	}
 	
+	@Test
+	public void test_vaccination_site_02d() {
+
+		VaccinationSite vs = new VaccinationSite("North York General Hospital", 10);
+		Vaccine v1 = new Vaccine("mRNA-1273", "RNA", "Moderna");
+		Vaccine v2 = new Vaccine("BNT162b2", "RNA", "Pfizer/BioNTech");
+
+		try {
+			/* Add the distribution of a recognized vaccine (identified by its codename) */
+			vs.addDistribution(v1, 6); // 4 doses left before reaching the maximum    
+		}
+		catch(UnrecognizedVaccineCodeNameException e) {
+			fail("Unexpected exception thrown");
+		}
+		catch(TooMuchDistributionException e) {
+			fail("Unexpected exception thrown");
+		}
+
+		/* up to this point, the site is 4 doses away from being "full". */
+
+		assertEquals(6, vs.getNumberOfAvailableDoses());
+		try {
+			/* 
+			 * Add the distribution of another recognized vaccine (identified by its codename).
+			 * Given that the vaccine's codename is recognized, 
+			 * 	because the quantity to add (5) will cause the resulting supply 
+			 * 	to exceed the limit 10 (set above), an error related to too much distribution will occur.	
+			 */
+			vs.addDistribution(v2, 5);   
+			fail("Expected exception not thrown");
+		}
+		catch(UnrecognizedVaccineCodeNameException e) {
+			fail("Unexpected exception thrown");
+		}
+		catch(TooMuchDistributionException e) {
+			// Expected
+		}
+
+	}
+	
+	@Test
+	public void test_vaccination_site_03a() {
+		/* 
+		 * Create a vaccination site with its name and
+		 * 	the limit on the number of doses accumulated from the added distributions.
+		 */
+		VaccinationSite vs = new VaccinationSite("North York General Hospital", 10);
+
+		Vaccine v1 = new Vaccine("mRNA-1273", "RNA", "Moderna");
+		Vaccine v2 = new Vaccine("BNT162b2", "RNA", "Pfizer/BioNTech");
+		try {
+			/* Add distributions of two recognized vaccines. */
+			vs.addDistribution(v1, 1);   
+			vs.addDistribution(v2, 2); 
+		}
+		catch(UnrecognizedVaccineCodeNameException e) {
+			fail("Unexpected exception thrown");
+		}
+		catch(TooMuchDistributionException e) {
+			fail("Unexpected exception thrown");
+		}
+
+		/* 3 doses are available: 3 appointments  possible */
+		assertEquals(3, vs.getNumberOfAvailableDoses());
+
+		HealthRecord alan = new HealthRecord("Alan", 5);
+		HealthRecord mark = new HealthRecord("Mark", 5);
+		HealthRecord tom = new HealthRecord("Tom", 5);
+
+		try {
+
+			vs.bookAppointment(alan);
+			/* success of appointment is reflected on the patient's appointment status */
+			assertEquals("Last vaccination appointment for Alan with North York General Hospital succeeded", alan.getAppointmentStatus());
+			vs.bookAppointment(mark);
+			assertEquals("Last vaccination appointment for Mark with North York General Hospital succeeded", mark.getAppointmentStatus());
+			vs.bookAppointment(tom);
+			assertEquals("Last vaccination appointment for Tom with North York General Hospital succeeded", tom.getAppointmentStatus());
+		}
+		catch(InsufficientVaccineDosesException e) {
+			fail("Unexpected exception thrown");
+		}
+
+		/* 
+		 * 3 appointments reserved: once they are administered, no doses will be left for further appointments.
+		 * 
+		 * However, since these appointments have not yet been administered, 
+		 * 	  the counting of available doses still includes ones that will be consumed by these appointments.  
+		 */
+		assertEquals(3, vs.getNumberOfAvailableDoses());
+
+		HealthRecord jim = new HealthRecord("Jim", 5);
+		try {
+			vs.bookAppointment(jim);
+			fail("Expeted exception not thrown");
+		}
+		catch(InsufficientVaccineDosesException e) {
+			/* failure of appointment is reflected on the patient's appointment status */
+			assertEquals("Last vaccination appointment for Jim with North York General Hospital failed", jim.getAppointmentStatus());
+		}
+	}
+	
 
 }
