@@ -15,10 +15,10 @@ public class VaccinationSite {
 	
 	public void addDistribution(Vaccine v, int numberOfDoses) throws 
 	UnrecognizedVaccineCodeNameException, TooMuchDistributionException {
-		boolean b1 = false;
+		
 		boolean b2 = false;
 		
-		if(b1) {
+		if(v.isRecognized() == false) {
 			throw new UnrecognizedVaccineCodeNameException("Error: ...");
 		}
 		else if(b2){
