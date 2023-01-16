@@ -9,6 +9,7 @@ public class HealthRecord {
 	private String[] dates;
 	private int noi; //number of data items
 	private final int MAX_SIZE_OF_DATA_COLLECTION;
+	private String appointmentStatus;
 
 	public HealthRecord(String name, int maxNumOfDoses) {
 		this.name = name;
@@ -17,7 +18,9 @@ public class HealthRecord {
 		this.sites = new String[MAX_SIZE_OF_DATA_COLLECTION];
 		this.dates = new String[MAX_SIZE_OF_DATA_COLLECTION];
 		this.noi = 0;
-	}
+		
+		this.appointmentStatus = null;
+	} 
 
 	//receive the vaccine v1 in the site NYGH on this particular date
 	public void addRecord(Vaccine v1, String site, String date) {
@@ -51,11 +54,24 @@ public class HealthRecord {
 		}
 
 		return result;
+	} 
+	
+	public void setAppointmentStatus(String status) {
+		this.appointmentStatus = status;
 	}
 
 	public String getAppointmentStatus() {
-		String result = String.format("No vaccination appointment for %s yet", this.name);
+		String result = null;
+		if(this.appointmentStatus == null) {
+			result = String.format("No vaccination appointment for %s yet", this.name);
+		}
+		else {
+			result = this.appointmentStatus;
+		}
 		return result;
 	}
-
+	
+	public String getName() {
+		return this.name;
+	}
 }

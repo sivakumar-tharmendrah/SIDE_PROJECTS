@@ -8,11 +8,18 @@ public class VaccinationSite {
 	private final int MAX_NUM_OF_DIST = 4;
 	private int maxSupply;
 	
+	private HealthRecord[] appointments;
+	private int noa;
+	private final int MAX_NUM_OF_APPOINTMENTS = 200;
+	
 	public VaccinationSite(String name, int maxSupply) {
 		this.maxSupply = maxSupply;
 		this.name = name; 
 		this.distributions = new VaccineDistribution[MAX_NUM_OF_DIST];
 		this.nod = 0;
+		
+		this.appointments = new HealthRecord[MAX_NUM_OF_APPOINTMENTS];
+		this.noa = 0;
 	}
 	
 	public void addDistribution(Vaccine v, int numberOfDoses) throws 
@@ -104,8 +111,33 @@ public class VaccinationSite {
 		return result;
 	}
 
-	public void bookAppointment(HealthRecord alan) {
-		// TODO Auto-generated method stub
+	public void bookAppointment(HealthRecord patient) throws InsufficientVaccineDosesException{
+		if(this.getNumberOfAvailableDoses() - this.noa == 0) {
+			patient.setAppointmentStatus(
+					String.format("Last vaccination appointment for %s with %s failed", 
+							patient.getName(), 
+							this.name));
+			throw new InsufficientVaccineDosesException("Error: ...");
+		}
+		else {
+			this.appointments[this.noa] = patient;
+			this.noa ++;
+			patient.setAppointmentStatus(
+					String.format("Last vaccination appointment for %s with %s succeeded", 
+							patient.getName(), 
+							this.name));
+		}
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+
+	public void administer(String date) {
+		//administer
+		for(int i = 0; i < this.noa; i ++) {
+			
+		}
 		
 	}
 	
