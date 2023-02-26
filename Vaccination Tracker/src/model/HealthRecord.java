@@ -38,7 +38,7 @@ public class HealthRecord {
 		}
 		else {
 			String list = "[";
-			for(int i = 0; i < this.noi; i ++) {
+			for(int i = 0; i < this.noi; i ++) { 
 				// Recognized vaccine: mRNA-1273 (RNA; Moderna) in North York General Hospital on April-20-2021
 				list += String.format("%s in %s on %s", 
 							this.vaccines[i].toString(), this.sites[i], this.dates[i]);
