@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import model.Unit;
 import model.Floor;
+import model.InsufficientFloorSpaceException;
 
 public class tests {
 

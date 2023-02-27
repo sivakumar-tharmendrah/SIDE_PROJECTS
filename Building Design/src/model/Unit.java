@@ -59,6 +59,18 @@ public class Unit {
 		}
 		return result;
 	}
+	
+	public String getFunction() {
+		return this.function;
+	}
+	
+	public int getWidth() {
+		return this.width;
+	}
+	
+	public int getLength() {
+		return this.length;
+	}
 
 	public int getAreaInSquareFeet() {
 		return this.width * this.length;
