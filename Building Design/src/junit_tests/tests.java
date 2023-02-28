@@ -118,5 +118,63 @@ public class tests {
 			assertEquals("Floor's utilized space is 270 sq ft (230 sq ft remaining): [Master Bedroom: 144 sq ft (18' by 8'), Office: 126 sq ft (18' by 7')]", f.toString());
 		}
 	}
+	
+	@Test 
+	public void test_floor_03() {
+		/*
+		 * Create two floor with some fixed capacities measured in square feet.
+		 */
+		Floor f1 = new Floor(500);
+		Floor f2 = new Floor(750);
+		
+		/*
+		 * Two floors are not considered equal if their maximum capacities are different. 
+		 */
+		assertNotEquals(f1, f2); //does f1.euqlas(f2)
+	}
+	
+	@Test 
+	public void test_floor_04() {
+		/*
+		 * Create two floor with some fixed capacities measured in square feet.
+		 */
+		Floor f1 = new Floor(500);
+		Floor f2 = new Floor(500);
+		
+		/*
+		 * Two floors are considered equal if: 
+		 * -their maximum capacities are the same; and
+		 * -their spaces are utilized in the same way 
+		 * 	(meaning that for each added unit in one floor, we can find its equivalent in the other floor)
+		 *  the orders in which units are added to the two floors do not matter.   
+		 */
+		assertEquals(f1, f2);
+		
+		try { 
+			f1.addUnit("Master Bedroom", 14, 9);
+			f1.addUnit("Master Bedroom", 14, 9);
+			f1.addUnit("Office", 8, 12);
+			f1.addUnit("Kitchen", 9, 10);
+			assertEquals("Floor's utilized space is 438 sq ft (62 sq ft remaining): [Master Bedroom: 126 sq ft (14' by 9'), Master Bedroom: 126 sq ft (14' by 9'), Office: 96 sq ft (8' by 12'), Kitchen: 90 sq ft (9' by 10')]", f1.toString());
+			
+			f2.addUnit("Master Bedroom", 7, 18);
+			f2.addUnit("Office", 16, 6);
+			f2.addUnit("Master Bedroom", 7, 18);
+			f2.addUnit("Kitchen", 9, 10);
+			assertEquals("Floor's utilized space is 438 sq ft (62 sq ft remaining): [Master Bedroom: 126 sq ft (7' by 18'), Office: 96 sq ft (16' by 6'), Master Bedroom: 126 sq ft (7' by 18'), Kitchen: 90 sq ft (9' by 10')]", f2.toString());
+			
+			/*
+			 * Floors f1 and f2 are utilized in the same way (despite the added orders of units):
+			 * 	+ 2 master bedrooms, each of 126'
+			 *  + 1 office of 96'
+			 *  + 1 kitchen of 90' 
+			 */
+			assertEquals(f1, f2);
+		}
+		catch(InsufficientFloorSpaceException e) {
+			fail("Unexpected exception thrown");
+		}
+
+	}
 
 }

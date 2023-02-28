@@ -26,9 +26,7 @@ public class Floor {
 		}
 		
 	}
-	
-	
-	 
+
 	public String toString() {
 		
 		String list = "[";
@@ -43,12 +41,12 @@ public class Floor {
 				list += ", ";
 			}
 		}
-		list = "]";
+		list += "]";
 		
 		
 		int utilizedSpace = this.getUtilizedSpace();
 		
-		String result = String.format("Floor's utilized space is %d sq ft (%d sq ft remaining): [%s", 
+		String result = String.format("Floor's utilized space is %d sq ft (%d sq ft remaining): %s", 
 								utilizedSpace,
 								this.maxCapacity - utilizedSpace,
 								list);
@@ -64,6 +62,17 @@ public class Floor {
 		}
 		
 		return total;
+	}
+	
+	public int numberOfEqualUnits(Unit u) {
+		int result = 0;
+		
+		for(int i = 0; i < this.nou; i ++) {
+			if(this.units[i].equals(u)) {
+				result ++;
+			}
+		}
+		return result;
 	}
 
 
