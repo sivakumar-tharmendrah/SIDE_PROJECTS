@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import model.Unit;
+import model.Blueprint;
 import model.Floor;
 import model.InsufficientFloorSpaceException;
 
@@ -175,6 +176,138 @@ public class tests {
 			fail("Unexpected exception thrown");
 		}
 
+	}
+	
+	@Test 
+	public void test_floor_05a() {
+		
+		// Create two floor with some fixed capacities measured in square feet.
+		 
+		Floor f1 = new Floor(500);
+		Floor f2 = new Floor(500);
+		 
+		try { 
+			f1.addUnit("Master Bedroom", 14, 9); 
+			f1.addUnit("Office", 8, 12);
+			f1.addUnit("Kitchen", 9, 10);
+			assertEquals("Floor's utilized space is 312 sq ft (188 sq ft remaining): [Master Bedroom: 126 sq ft (14' by 9'), Office: 96 sq ft (8' by 12'), Kitchen: 90 sq ft (9' by 10')]", f1.toString());
+			
+			f2.addUnit("Master Bedroom", 7, 18);
+			f2.addUnit("Office", 16, 6);
+			f2.addUnit("Master Bedroom", 7, 18);
+			f2.addUnit("Kitchen", 9, 10);
+			assertEquals("Floor's utilized space is 438 sq ft (62 sq ft remaining): [Master Bedroom: 126 sq ft (7' by 18'), Office: 96 sq ft (16' by 6'), Master Bedroom: 126 sq ft (7' by 18'), Kitchen: 90 sq ft (9' by 10')]", f2.toString());
+			
+			
+			//Floors f1 and f2 are utilized differently (despite the added orders of units):
+			//+ In f2 one of the master bedrooms of 126 sq ft cannot be found for its equivalent in f1.   
+			
+			assertNotEquals(f1, f2);
+		}
+		catch(InsufficientFloorSpaceException e) {
+			fail("Unexpected exception thrown");
+		}
+
+	}
+	
+	@Test 
+	public void test_floor_05b() {
+		/*
+		 * Create two floor with some fixed capacities measured in square feet.
+		 */
+		Floor f1 = new Floor(500);
+		Floor f2 = new Floor(500);
+		 
+		try { 
+			f1.addUnit("Master Bedroom", 14, 9);
+			f1.addUnit("Master Bedroom", 13, 9);
+			f1.addUnit("Office", 8, 12);
+			f1.addUnit("Kitchen", 9, 10);
+			assertEquals("Floor's utilized space is 429 sq ft (71 sq ft remaining): [Master Bedroom: 126 sq ft (14' by 9'), Master Bedroom: 117 sq ft (13' by 9'), Office: 96 sq ft (8' by 12'), Kitchen: 90 sq ft (9' by 10')]", f1.toString());
+			
+			f2.addUnit("Master Bedroom", 7, 18);
+			f2.addUnit("Office", 16, 6);
+			f2.addUnit("Master Bedroom", 7, 18);
+			f2.addUnit("Kitchen", 9, 10);
+			assertEquals("Floor's utilized space is 438 sq ft (62 sq ft remaining): [Master Bedroom: 126 sq ft (7' by 18'), Office: 96 sq ft (16' by 6'), Master Bedroom: 126 sq ft (7' by 18'), Kitchen: 90 sq ft (9' by 10')]", f2.toString());
+			
+			/*
+			 * Floors f1 and f2 are utilized differently (despite the added orders of units):
+			 * 	+ f1 has two master bedrooms of different sizes
+			 * 	+ f2 has two master bedrooms of the same size 
+			 */
+			assertNotEquals(f1, f2);
+		}
+		catch(InsufficientFloorSpaceException e) {
+			fail("Unexpected exception thrown");
+		}
+
+	}
+	
+	/*
+	 * Tests related to the Blueprint class.
+	 */
+	@Test
+	public void test_blueprint_01() {
+		/*
+		 * Create the blueprint for a 7-floor building.
+		 */
+		Blueprint bp = new Blueprint(7);
+		
+		/*
+		 * Show the percentage of the building blueprint being completed 
+		 * 	(based on the number of floor plans added).
+		 * The percentage value displayed with 1 digit after the decimal point.
+		 */
+		assertEquals("0.0 percents of building blueprint completed (0 out of 7 floors)", bp.toString());
+		
+		Floor f1 = new Floor(500);
+		Floor f2 = new Floor(500);
+		
+		/*
+		 * Add units to the two floors, before adding them to the blueprint.
+		 */
+		try { 
+			/*
+			 * Error checking on argument values of the `addUnit` method is not needed.
+			 */
+			f1.addUnit("Master Bedroom", 14, 9);
+			f1.addUnit("Master Bedroom", 13, 9);
+			f1.addUnit("Office", 8, 12);
+			f1.addUnit("Kitchen", 9, 10);
+			assertEquals("Floor's utilized space is 429 sq ft (71 sq ft remaining): [Master Bedroom: 126 sq ft (14' by 9'), Master Bedroom: 117 sq ft (13' by 9'), Office: 96 sq ft (8' by 12'), Kitchen: 90 sq ft (9' by 10')]", f1.toString());
+			
+			f2.addUnit("Master Bedroom", 7, 18);
+			f2.addUnit("Office", 16, 6);
+			f2.addUnit("Master Bedroom", 7, 18);
+			f2.addUnit("Kitchen", 9, 10);
+			assertEquals("Floor's utilized space is 438 sq ft (62 sq ft remaining): [Master Bedroom: 126 sq ft (7' by 18'), Office: 96 sq ft (16' by 6'), Master Bedroom: 126 sq ft (7' by 18'), Kitchen: 90 sq ft (9' by 10')]", f2.toString());
+		}
+		catch(InsufficientFloorSpaceException e) {
+			fail("Unexpected exception thrown");
+		}
+		
+		bp.addFloorPlan(f1);
+		assertEquals("14.3 percents of building blueprint completed (1 out of 7 floors)", bp.toString());
+		bp.addFloorPlan(f2);
+		assertEquals("28.6 percents of building blueprint completed (2 out of 7 floors)", bp.toString());
+		
+		/*
+		 * Retrieve the list of floor plans. 
+		 */
+		Floor[] fs = bp.getFloors();
+		assertEquals(2, fs.length);
+		
+		/*
+		 * The accessor `getFloors` should preserve composition:
+		 * 	the returned floor plans are not to be shared with the blueprint `bp`.
+		 */
+		assertNotSame(fs[0], f1);
+		assertEquals(fs[0], f1);
+		
+		assertNotSame(fs[1], f2);
+		assertEquals(fs[1], f2);
+		
 	}
 
 }

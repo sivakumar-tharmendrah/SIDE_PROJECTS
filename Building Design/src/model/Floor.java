@@ -26,6 +26,25 @@ public class Floor {
 		}
 		
 	}
+	
+	public boolean equals(Object obj) {
+		if(this == obj) {
+			return true;
+		}
+		else if(obj == null || this.getClass() != obj.getClass()) {
+			return false;
+		}
+		Floor other = (Floor) obj;
+		boolean equal = this.maxCapacity == other.maxCapacity;
+		if(equal) {
+			for(int i = 0; equal && i < this.nou; i ++) { 
+				Unit u = this.units[i];
+				equal = this.numberOfEqualUnits(u) == other.numberOfEqualUnits(u);
+			}
+		}
+		return equal;
+		
+	}
 
 	public String toString() {
 		
@@ -74,6 +93,8 @@ public class Floor {
 		}
 		return result;
 	}
+	
+	
 
 
 }
