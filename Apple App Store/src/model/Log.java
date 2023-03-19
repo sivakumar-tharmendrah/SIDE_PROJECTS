@@ -3,6 +3,9 @@ package model;
 public class Log {
 	
 	private String version;
+	
+	private String[] fixes;
+	private int nof;
 
 	public Log(String version) {
 		this.version = version;
@@ -24,7 +27,7 @@ public class Log {
 	}
 	
 	public String toString() {
-		"Version 5.7.31 contains 0 fixes []"
+		return String.format("Version %s contains %d fixes %s", this.version, this.getNumberOfFixes(), this.getFixes());
 	}
 	
 }

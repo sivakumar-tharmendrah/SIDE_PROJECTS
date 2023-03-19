@@ -7,7 +7,7 @@ import org.junit.Test;
 import model.Log;
 
 public class tests {
-	
+
 
 	@Test
 	public void test_log_01() {
