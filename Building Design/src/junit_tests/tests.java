@@ -309,5 +309,87 @@ public class tests {
 		assertEquals(fs[1], f2);
 		
 	}
+	
+	@Test
+	public void test_blueprint_02() {
+		/*
+		 * Create the blueprint for a 7-floor building.
+		 */
+		Blueprint bp1 = new Blueprint(7);
+		
+		/*
+		 * Show the percentage of the building blueprint being completed 
+		 * 	(based on the number of floor plans added).
+		 * The percentage value should be displayed with 1 digit after the decimal point.
+		 */
+		assertEquals("0.0 percents of building blueprint completed (0 out of 7 floors)", bp1.toString());
+		
+		Floor f1 = new Floor(500);
+		Floor f2 = new Floor(500);
+		
+		/*
+		 * Add units to the two floors, before adding them to the blueprint.
+		 */
+		try { 
+			/*
+			 * Error checking on argument values of the `addUnit` method is not needed.
+			 */
+			f1.addUnit("Master Bedroom", 14, 9);
+			f1.addUnit("Master Bedroom", 13, 9);
+			f1.addUnit("Office", 8, 12);
+			f1.addUnit("Kitchen", 9, 10);
+			assertEquals("Floor's utilized space is 429 sq ft (71 sq ft remaining): [Master Bedroom: 126 sq ft (14' by 9'), Master Bedroom: 117 sq ft (13' by 9'), Office: 96 sq ft (8' by 12'), Kitchen: 90 sq ft (9' by 10')]", f1.toString());
+			
+			f2.addUnit("Master Bedroom", 7, 18);
+			f2.addUnit("Office", 16, 6);
+			f2.addUnit("Master Bedroom", 7, 18);
+			f2.addUnit("Kitchen", 9, 10);
+			assertEquals("Floor's utilized space is 438 sq ft (62 sq ft remaining): [Master Bedroom: 126 sq ft (7' by 18'), Office: 96 sq ft (16' by 6'), Master Bedroom: 126 sq ft (7' by 18'), Kitchen: 90 sq ft (9' by 10')]", f2.toString());
+		}
+		catch(InsufficientFloorSpaceException e) {
+			fail("Unexpected exception thrown");
+		}
+		
+		bp1.addFloorPlan(f1);
+		assertEquals("14.3 percents of building blueprint completed (1 out of 7 floors)", bp1.toString());
+		bp1.addFloorPlan(f2);
+		assertEquals("28.6 percents of building blueprint completed (2 out of 7 floors)", bp1.toString());
+		
+		/*
+		 * Create a new building blueprint from another. 
+		 */
+		Blueprint bp2 = new Blueprint(bp1);
+		
+		/*
+		 * Retrieve the list of floor plans from the blueprint `bp1`. 
+		 */
+		Floor[] fs1 = bp1.getFloors();
+		assertEquals("28.6 percents of building blueprint completed (2 out of 7 floors)", bp2.toString());
+		assertEquals(2, fs1.length);
+		
+		/*
+		 * Retrieve the list of floor plans from the new blueprint `bp2`. 
+		 */
+		Floor[] fs2 = bp2.getFloors();
+		assertEquals("28.6 percents of building blueprint completed (2 out of 7 floors)", bp2.toString());
+		assertEquals(2, fs2.length);
+		
+		/*
+		 * The accessor `getFloors` should preserve composition:
+		 * 	the returned floor plans are not to be shared with 
+		 * 		either the blueprint `bp1` or the blueprint `bp2`.
+		 */
+		assertNotSame(fs2[0], f1);
+		assertEquals(fs2[0], f1);
+		
+		assertNotSame(fs1[0], fs2[0]);
+		assertEquals(fs1[0], fs2[0]);
+		
+		assertNotSame(fs2[1], f2);
+		assertEquals(fs2[1], f2);
+		
+		assertNotSame(fs1[1], fs2[1]);
+		assertEquals(fs1[1], fs2[1]);
+	}
 
 }

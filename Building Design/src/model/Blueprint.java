@@ -12,6 +12,15 @@ public class Blueprint {
 		this.nof = 0;
 	}    
 	
+	public Blueprint(Blueprint other) {
+		this(other.maxNumOfFloors);
+		
+		for(int i = 0; i < other.nof; i ++) {
+			this.floors[i] = new Floor(other.floors[i]);
+		}
+		this.nof = other.nof;
+	}
+
 	public void addFloorPlan(Floor f) {
 		this.floors[this.nof] = f;
 		this.nof ++;

@@ -13,6 +13,16 @@ public class Floor {
 		this.units = new Unit[MAX_NUM_OF_UNITS];
 		this.nou = 0;
 	} 
+	
+	public Floor(Floor other) { 
+		this(other.maxCapacity);
+		
+		for(int i = 0; i < other.nou; i ++) {
+			this.units[i] = other.units[i];
+		}
+		
+		this.nou = other.nou;
+	}
 
 	public void addUnit(String function, int width, int length) throws InsufficientFloorSpaceException {
 		
