@@ -2,32 +2,52 @@ package model;
 
 public class Log {
 
-private String version;
-	
+	private String version;
+
 	private String[] fixes;
-	private int nof;
+	private int nof; //number of fixes
+	private final int MAX_NUM_OF_FIXES = 10;
 
 	public Log(String version) {
 		this.version = version;
+		this.fixes = new String[MAX_NUM_OF_FIXES];
+		this.nof = 0;
+	}
+
+	public void addFix(String fix) {
+		this.fixes[this.nof] = fix;
+		this.nof ++;
 	}
 
 	public String getVersion() {
-		
-		
-		return null;
+		return this.version;
 	}
 
 	public int getNumberOfFixes() {
-		
-		return 0;
+
+		return this.nof;
 	}
-	
+
 	public String getFixes() {
-		return null;
+		String s = "";
+
+		s += "[";
+
+		for(int i = 0; i < this.nof; i ++) {
+			s += this.fixes[i];
+			if(i < this.nof - 1) {
+				s += ", ";
+			}
+		}
+
+		s += "]";
+
+		return s;
 	}
-	
+
 	public String toString() {
-		return String.format("Version %s contains %d fixes %s", this.version, this.getNumberOfFixes(), this.getFixes());
+		return String.format("Version %s contains %d fixes %s", 
+				this.version, this.getNumberOfFixes(), this.getFixes());
 	}
 
 }

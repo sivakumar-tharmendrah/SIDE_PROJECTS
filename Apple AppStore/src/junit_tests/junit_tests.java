@@ -31,7 +31,26 @@ public class junit_tests {
 		 */
 		String s2 = appUpdate.toString();
 		assertEquals("Version 5.7.31 contains 0 fixes []", s2);
-
 	}
 
+	@Test
+	public void test_log_02() {
+		Log appUpdate = new Log("5.7.31");
+		
+		//add 2 fixes to update log
+		//no error handling is needed when the max limit is exceeded
+		
+		appUpdate.addFix("Addressed writing lag issues");
+		appUpdate.addFix("Fixed a bug about dismissing menus");
+		
+		assertEquals("5.7.31", appUpdate.getVersion());
+		//2 fixes have been added to the app update log so far
+		assertEquals(2, appUpdate.getNumberOfFixes());
+		//list of fixes returned is comma-separated
+		
+		assertEquals("[Addressed writing lag issues, Fixed a bug about dismissing menus]", appUpdate.getFixes());
+		assertEquals("Version 5.7.31 contains 2 fixes [Addressed writing lag issues, Fixed a bug about dismissing menus]", app);
+		
+	}
+ 
 }
