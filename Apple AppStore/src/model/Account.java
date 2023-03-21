@@ -63,22 +63,21 @@ public class Account {
 	}
 	
 	public App[] getObjectsOfDownloadedApps() {
+		App[] apps = new App[this.noa];
+		
+		for(int i = 0; i < this.noa; i ++) {
+			String nameOfApp = this.namesOfDownloadedApps[i];
+			App app = this.getApp(nameOfApp);
+			//once i get it, i can now assign that to apps
+			apps[i] = app;
+		}
+		
 		return new App[0];
 	}
 	
 	//Given the name of app, find its corresponding app object in the linked store
 	private App getApp(String nameOfApp) {
-		App result = null;
-		boolean foundMatch = false;
-		for(int i = 0; i < this.noa && !foundMatch; i ++) {
-			String l = this.updates[i];
-			if(l.getVersion().equals(version)) {
-				result = l;
-				foundMatch = true;
-			}
-		}
-
-		return result;
+		return this.store.getApp(nameOfApp);
 	}
 	
 	public String toString() {
