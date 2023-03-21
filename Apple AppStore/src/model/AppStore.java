@@ -42,7 +42,7 @@ public class AppStore {
 			if(app.getUpdateHistory().length >= numberOfUpdates) {
 				stableApps[count] =
 					String.format("%d versions; Current Versions: %s", 
-							app.getName(), app.getUpdateHistory().length, app.getUpdateHistory().length, app.getWhatIsNew());
+							app.getName(), app.getUpdateHistory().length, app.getWhatIsNew());
 				count ++;
 			}
 		}
