@@ -57,7 +57,7 @@ public class App {
 			uh[i] = this.updates[i];
 		}
 
-		return new Log[0];
+		return uh;
 	}
 
 

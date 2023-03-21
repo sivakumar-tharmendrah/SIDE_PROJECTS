@@ -41,7 +41,7 @@ public class AppStore {
 			App app = this.apps[i];
 			if(app.getUpdateHistory().length >= numberOfUpdates) {
 				stableApps[count] =
-					String.format("%d versions; Current Versions: %s", 
+					String.format("%s (%d versions; Current Versions: %s)", 
 							app.getName(), app.getUpdateHistory().length, app.getWhatIsNew());
 				count ++;
 			}
